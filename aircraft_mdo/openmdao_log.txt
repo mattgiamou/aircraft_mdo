@@ -1,0 +1,16 @@
+Feb 21 11:06:23 W root: The following components are not in any workflow and WILL NOT EXECUTE: ['flight_score']
+Feb 21 11:06:24 W solver: 'solver': workflow is empty!
+Feb 21 11:06:24 W solver: 'solver': workflow is empty!
+Feb 21 11:06:24 W solver: 'solver': workflow is empty!
+Feb 21 11:06:24 W solver: 'solver': workflow is empty!
+Feb 21 11:06:24 W solver: 'solver': workflow is empty!
+Feb 21 11:06:24 W solver: 'solver': workflow is empty!
+Feb 21 11:06:24 W solver: 'solver': workflow is empty!
+Feb 21 11:06:24 W solver: 'solver': workflow is empty!
+Feb 21 11:06:24 W solver: 'solver': workflow is empty!
+Feb 21 11:06:24 W solver: 'solver': workflow is empty!
+Feb 21 11:06:24 W solver: 'solver': workflow is empty!
+Feb 21 11:06:24 W solver: 'solver': workflow is empty!
+Feb 21 11:06:24 W solver: 'solver': workflow is empty!
+Feb 21 11:06:24 W solver: 'solver': workflow is empty!
+Feb 21 11:06:24 W driver: Positive directional derivative for linesearch
