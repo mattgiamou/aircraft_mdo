@@ -1,38 +1,51 @@
 """
-AVL bridge.
+AVL bridge using pexpect.
 """
 import pexpect
-import sys
-import subprocess
-from time import sleep
 
 avl_expect = '[crs]>'
-avl_commands = ['']
 
-def avl_file_IO():
-    """ Uses subprocess to write AVL forces and stability derivatives to file.
-    """
+class AVL():
+    avl_expect = '[crs]>'
     
+    def __init__(self, avl_filename):
+        """
+        Construct a new bridge each time the geometry is modified. Use the 
+        'with' statement to avoid leaving the process running.
+        """
+        self.p = pexpect.spawn('avl ' + avl_filename)
+        
+    def set_parameter(self, param, value):
+        """
+        Sets a parameter in AVL.
+        """
+        pass
     
+    def set_constraint(self, param, constrainer, constraint):
+        """
+        Sets a constraint in AVL.
+        E.g.: param = 'a', constrainer = 'c', constraint = 0.2 would constrain
+        alpha such that CL = 0.2
+        """
+        pass
+    
+    def run(self):
+        """
+        Returns aerodynamics and stability values.
+        """
+        pass        
+        
 
-def subprocess_attempt():
-    fout = open('log/avl_test_log1.txt','w+')
-    avl = subprocess.Popen(['avl', 'avl/eppler330_config_no_tail'],
-                           stdin=subprocess.PIPE, stdout=sys.stdout,
-                           stderr=subprocess.PIPE)
-    print "Spawned avl."
-    #stdout1, stderr1 = avl.communicate('oper')
-    # The second time I try to communicate with it, it breaks.
-    avl.stdin.write('oper')
-    avl.stdin.write('x')
-    #avl.stdout.flush()
-    
-    fout.close()
-    avl.terminate()
-    
+    # These encourage this class to be used with a "with" statement        
+    def __enter__(self):
+        return self
+        
+    def __exit__(self):
+        self.p.close(force=True)
+        
 def pexpect_attempt():
     """ 
-    Eventually, wrap as its own class.
+    For testing pexpect with AVL.
     """
     avl = pexpect.spawn('avl avl/eppler330_config_no_tail')
     fout = open('log/avl_test_log1.txt','w+')
