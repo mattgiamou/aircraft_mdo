@@ -1,6 +1,8 @@
 """
-AVL bridge using pexpect library.
+Athena Vortex Lattice (AVL) wrapper using pexpect library. 
+AVL must be installed and on the path.
 """
+
 import pexpect
 
 # Reg. expression for AVL console
@@ -8,9 +10,6 @@ avl_expect = '[crs]>'
 default_file = 'avl/eppler330_config_no_tail'
 
 class AVL():
-    # Reg. expression for AVL console
-    avl_expect = '[crs]>'
-    default_file = 'avl/eppler330_config_no_tail'
     
     def __init__(self, avl_filename=default_file):
         """
@@ -18,9 +17,10 @@ class AVL():
         'with' statement to avoid leaving the process running.
         """
         self.p = pexpect.spawn('avl ' + avl_filename)
-        # Do I need to set oper each time?
+        # Ready the AVL process for execution
+        self.expect() # The first instance of c>
         self.p.sendline('oper')
-        self.p.expect(self.avl_expect)
+        self.expect()
         
     def expect(self, token=avl_expect):
         self.p.expect(token)
@@ -35,7 +35,7 @@ class AVL():
         self.expect()
         self.p.sendline(str(value))
         self.expect()
-        self.p.sendline('')
+        self.p.sendline()
         self.expect()
         return self.p.before
     
@@ -43,23 +43,25 @@ class AVL():
         """
         Sets a constraint in AVL.
         E.g.: param = 'a', constrainer = 'c', constraint = 0.2 would constrain
-        alpha such that CL = 0.2. May need to cache the set value because it 
-        needs to be expect()-ed (check this)
+        alpha such that CL = 0.2.
         """
-        pass
-    
+        self.p.sendline(param+' '+constrainer+' '+str(constraint))
+        self.expect()
+        return self.p.before
+        
     def run(self):
         """
         Returns aerodynamics and stability values.
         """
-        pass        
-        
+        self.p.sendline('x')        
+        self.expect()
+        return self.p.before
 
     # These encourage this class to be used with a "with" statement        
     def __enter__(self):
         return self
         
-    def __exit__(self):
+    def __exit__(self, type, value, traceback):
         self.p.close(force=True)
         
 def pexpect_attempt():
@@ -95,6 +97,12 @@ def pexpect_attempt():
     
 if __name__ == '__main__':
     #pexpect_attempt()
-    avl = AVL()
-    output = avl.set_parameter('CD', 0.02)
-    print output
+    with AVL() as avl:
+        param_output = avl.set_parameter('CD', 0.02)
+        print param_output
+        constraint_output = avl.set_constraint('a', 'a', 0.5)
+        print constraint_output
+        constraint_output = avl.set_constraint('a', 'a', 3)
+        print constraint_output
+        run_output = avl.run()
+        print run_output
