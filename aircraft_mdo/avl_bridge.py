@@ -4,6 +4,7 @@ AVL must be installed and on the path.
 """
 
 import pexpect
+import re
 
 # Reg. expression for AVL console
 avl_expect = '[crs]>'
@@ -56,6 +57,18 @@ class AVL():
         self.p.sendline('x')        
         self.expect()
         return self.p.before
+        
+    def get_output_val(self, output, var):
+        """
+        Extract variable 'var' from string output.
+        """
+        # Needs +,-,., and E for exponential notation
+        match1 = re.search(str(var)+' =[ ]+[\.\-\+0-9E]+', run_output)
+        subquery = output[match1.start():match1.end()]
+        # Extract the number from the sub-query
+        submatch = re.search('[\.\-\+0-9E]+', subquery)
+        val = subquery[submatch.start():submatch.end()]
+        return float(val) 
 
     # These encourage this class to be used with a "with" statement        
     def __enter__(self):
@@ -64,39 +77,8 @@ class AVL():
     def __exit__(self, type, value, traceback):
         self.p.close(force=True)
         
-def pexpect_attempt():
-    """ 
-    For testing pexpect with AVL.
-    """
-    avl = pexpect.spawn('avl avl/eppler330_config_no_tail')
-    fout = open('log/avl_test_log1.txt','w+')
-    avl.logfile_read = fout # or sys.stdout for screen
-    print "Spawned process."
-    avl.expect(avl_expect)
-    avl.sendline('oper')
-    print "Sent oper. \n"
-    avl.expect(avl_expect)
-    avl.sendline('m')
-    avl.expect(avl_expect)
-    avl.sendline('v')
-    avl.expect(avl_expect)
-    avl.sendline('15')
-    avl.expect(avl_expect)
-    avl.sendline('')
-    avl.expect(avl_expect)
-    avl.sendline('x')
-    avl.expect(avl_expect)
-    avl.sendline('st')
-    avl.expect(avl_expect)
-    avl.sendline(' ')
-    avl.expect(avl_expect)
-    print avl.before   
-    avl.close(True)    
-    fout.close()
-    print "\nClosed process."
-    
 if __name__ == '__main__':
-    #pexpect_attempt()
+    #Test basic functionality
     with AVL() as avl:
         param_output = avl.set_parameter('CD', 0.02)
         print param_output
@@ -106,3 +88,5 @@ if __name__ == '__main__':
         print constraint_output
         run_output = avl.run()
         print run_output
+        zref = avl.get_output_val(run_output, 'Zref')
+        print zref
