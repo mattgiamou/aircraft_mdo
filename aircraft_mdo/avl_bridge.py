@@ -26,6 +26,12 @@ class AVL():
         self.expect()
         
     def expect(self, token=avl_expect):
+        """
+        Convenience method. Advances the reader along the output stream until
+        'token' or EOF is found. The string between the 2nd last expect() 
+        call's token and the last expect() call's token is available as 
+        "p.before".
+        """
         self.p.expect(token)
         
     def set_parameter(self, param, value):
@@ -56,14 +62,27 @@ class AVL():
         """
         Returns aerodynamics and stability values.
         """
+        # Execute AVL's solver for current parameters and constraints
         self.p.sendline('x')        
         self.expect()
+        
+        # Extract aerodynamic coefficients
         output = self.p.before
         CL = self.get_output_val(output, 'CLtot')
         CD = self.get_output_val(output, 'CDtot')
         CM = self.get_output_val(output, 'Cmtot')
         
-        return (CL, CD, CM)
+        # Extract stability derivatives
+        self.p.sendline('st')
+        self.expect()
+        self.p.sendline()
+        self.expect()
+        stab_output = self.p.before
+        # These are output as radians, convert
+        CL_alpha = self.get_output_val(stab_output, 'CLa')*np.pi/180.0
+        CM_alpha = self.get_output_val(stab_output, 'Cma')*np.pi/180.0
+        
+        return (CL, CD, CM, CL_alpha, CM_alpha)
         
         
     def get_output_val(self, output, var):
@@ -83,6 +102,9 @@ class AVL():
         return self
         
     def __exit__(self, type, value, traceback):
+        """ 
+        Closes the AVL process.
+        """
         self.p.close(force=True)
         
 if __name__ == '__main__':
@@ -90,15 +112,13 @@ if __name__ == '__main__':
     # exit)
     with AVL() as avl:
         param_output = avl.set_parameter('CD', 0.02)
-        print param_output
+        #print param_output
         constraint_output = avl.set_constraint('a', 'a', 0.5)
-        print constraint_output
+        #print constraint_output
         constraint_output = avl.set_constraint('a', 'a', 3)
-        print constraint_output
+        #print constraint_output
         run_output = avl.run()
-        print run_output
-        #zref = avl.get_output_val(run_output, 'Zref')
-        #print zref
+        #print run_output
         
     with AVL() as avl:
         N = 11
@@ -107,12 +127,14 @@ if __name__ == '__main__':
         CD = np.zeros(CL.shape)
         CM = np.zeros(CL.shape)
         
+        #avl.set_parameter('x', 0.2)
         for idx in xrange(0, N):
             avl.set_constraint('a','a',alpha[idx])
-            cl,cd,cm = avl.run()
+            cl,cd,cm,cla,cma = avl.run()
             CL[idx] = cl
             CD[idx] = cd
             CM[idx] = cm
+            print "Static margin: ", str(-cma/cla), '\n'
         plt.figure()
         plt.plot(alpha, CL)
         plt.grid()
