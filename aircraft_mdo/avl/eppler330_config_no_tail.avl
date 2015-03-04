@@ -1,0 +1,63 @@
+BWBDesign_s1223
+0.0                          | Mach
+0     0     0.0              | iYsym  iZsym  Zsym
+
+   0.620      0.520      1.400  | Sref   Cref   Bref
+# Note : check consistency of area unit above with length units of the file
+   0.342     0.000     0.004          | Xref   Yref   Zref
+ 0.00                        | CDp  (optional)
+
+
+
+#=================================================
+SURFACE                      | (keyword)
+eppler330_config_no_tail_Wing
+#Nchord    Cspace   [ Nspan Sspace ]
+11        1.0
+
+INDEX                        | (keyword)
+196641970                          | Lsurf
+
+YDUPLICATE
+0.0
+
+SCALE
+1.0  1.0  1.0
+
+TRANSLATE
+0.0  0.0  0.0
+
+ANGLE
+   0.000                         | dAinc
+
+
+#______________
+SECTION                                                     |  (keyword)
+   0.0000    0.0000    0.0000    0.8000   0.000    6    3   | Xle Yle Zle   Chord Ainc   [ Nspan Sspace ]
+
+AFIL 0.0 1.0
+e330.dat
+
+#______________
+SECTION                                                     |  (keyword)
+   0.2000    0.2000    0.0000    0.6000   0.000    3    1   | Xle Yle Zle   Chord Ainc   [ Nspan Sspace ]
+
+AFIL 0.0 1.0
+e330.dat
+
+#______________
+SECTION                                                     |  (keyword)
+   0.3200    0.3000    0.0000    0.4000   0.000   12    1   | Xle Yle Zle   Chord Ainc   [ Nspan Sspace ]
+
+AFIL 0.0 1.0
+e330.dat
+
+#______________
+SECTION                                                     |  (keyword)
+   0.5400    0.7000    0.0000    0.2000   0.000   12    1   | Xle Yle Zle   Chord Ainc   [ Nspan Sspace ]
+
+AFIL 0.0 1.0
+e330.dat
+
+
+
