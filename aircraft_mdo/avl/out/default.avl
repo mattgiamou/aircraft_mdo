@@ -1,0 +1,59 @@
+MDO_Template
+0.0                          | Mach
+0     0     0.0              | iYsym  iZsym  Zsym
+0.793932667397      0.567094762427      1.4  | Sref   Cref   Bref
+0.259     0.000     0.002    | Xref   Yref   Zref
+0.04                         | CDp
+
+#=================================================
+SURFACE                      | (keyword)
+BWB
+#Nchord    Cspace   [ Nspan Sspace ]
+11        1.0
+
+INDEX                        | (keyword)
+1196058030                          | Lsurf
+
+YDUPLICATE
+0.0
+
+SCALE
+1.0  1.0  1.0
+
+TRANSLATE
+0.0  0.0  0.0
+
+ANGLE
+0.000                         | dAinc
+
+
+#______________
+SECTION                                                     |  (keyword)
+0.0000    0.0000    0.0000    0.8   0.000    4    3   | Xle Yle Zle   Chord Ainc   [ Nspan Sspace ]
+
+AFIL 0.0 1.0
+avl/airfoils/e330.dat
+
+#______________
+SECTION                                                     |  (keyword)
+0.0401923788647    0.15    0.0000    0.759807621135   0.000    3    1   | Xle Yle Zle   Chord Ainc   [ Nspan Sspace ]
+
+AFIL 0.0 1.0
+avl/airfoils/e330.dat
+
+#______________
+SECTION                                                     |  (keyword)
+0.3    0.25    0.000	    0.4     0.000   14    1   | Xle Yle Zle   Chord Ainc   [ Nspan Sspace ]
+
+AFIL 0.0 1.0
+avl/airfoils/e330.dat
+
+#______________
+SECTION                                                     |  (keyword)
+0.46378660542    0.7    0.0000    0.24   4.0   12    1   | Xle Yle Zle   Chord Ainc   [ Nspan Sspace ]
+
+AFIL 0.0 1.0
+avl/airfoils/e330.dat
+
+
+

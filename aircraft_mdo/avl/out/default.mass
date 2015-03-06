@@ -1,0 +1,30 @@
+#-------------------------------------------------
+#
+#   config4
+#
+#  Dimensional unit and parameter data.
+#  Mass & Inertia breakdown.
+#-------------------------------------------------
+#  Names and scalings for units to be used for trim and eigenmode calculations.
+#  The Lunit and Munit values scale the mass, xyz, and inertia table data below.
+#  Lunit value will also scale all lengths and areas in the AVL input file.
+#
+Lunit =     1.0000 m
+Munit =     1.0000 kg
+Tunit = 1.0 s
+#-------------------------
+#  Gravity and density to be used as default values in trim setup (saves runtime typing).
+#  Must be in the unit names given above (i.e. m,kg,s).
+g   = 9.81
+rho = 1.225
+#-------------------------
+#  Mass & Inertia breakdown.
+#  x y z  is location of item's own CG.
+#  Ixx... are item's inertias about item's own CG.
+#
+#  x,y,z system here must be exactly the same one used in the .avl input file
+#     (same orientation, same origin location, same length units)
+#
+#     mass          x          y          z        Ixx        Iyy        Izz        Ixy        Ixz        Iyz 
+#         1      0.418   3.08e-17    0.00348     0.0684     0.0252     0.0935          0    0.00083          0 ! default
+          1        0.1          0          0      0.000      0.000      0.000 ! 
