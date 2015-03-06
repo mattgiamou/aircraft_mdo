@@ -1,12 +1,15 @@
 """
 Athena Vortex Lattice (AVL) wrapper using pexpect library. 
 AVL must be installed and on the path.
+
+TODO: Make XFOIL version as well!!
 """
 
 import pexpect
 import re
 import numpy as np
 from matplotlib import pyplot as plt
+from time import time
 
 # Reg. expression for AVL console
 avl_expect = '[crs]>'
@@ -78,7 +81,7 @@ class AVL():
         self.p.sendline()
         self.expect()
         stab_output = self.p.before
-        # These are output as radians, convert
+        # These have output unit of inverse radians, convert to degrees
         CL_alpha = self.get_output_val(stab_output, 'CLa')*np.pi/180.0
         CM_alpha = self.get_output_val(stab_output, 'Cma')*np.pi/180.0
         
@@ -120,21 +123,23 @@ if __name__ == '__main__':
         run_output = avl.run()
         #print run_output
         
-    with AVL() as avl:
+    with AVL('avl/eppler330_naca0010_config_no_tail') as avl:
         N = 11
         alpha = np.linspace(0, 10, N)
         CL = np.zeros(alpha.shape)
         CD = np.zeros(CL.shape)
         CM = np.zeros(CL.shape)
-        
+        avl.set_parameter('v', 15)
         #avl.set_parameter('x', 0.2)
         for idx in xrange(0, N):
+            t = time()
             avl.set_constraint('a','a',alpha[idx])
             cl,cd,cm,cla,cma = avl.run()
             CL[idx] = cl
             CD[idx] = cd
             CM[idx] = cm
-            print "Static margin: ", str(-cma/cla), '\n'
+            #print "Static margin: ", str(-cma/cla), '\n'
+            #print 'Time: ', (time()-t), ' s\n'
         plt.figure()
         plt.plot(alpha, CL)
         plt.grid()

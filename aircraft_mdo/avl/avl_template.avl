@@ -1,0 +1,59 @@
+MDO_Template
+0.0                          | Mach
+0     0     0.0              | iYsym  iZsym  Zsym
+S_REF      C_REF      B_REF  | Sref   Cref   Bref
+0.259     0.000     0.002    | Xref   Yref   Zref
+0.04                         | CDp
+
+#=================================================
+SURFACE                      | (keyword)
+BWB
+#Nchord    Cspace   [ Nspan Sspace ]
+11        1.0
+
+INDEX                        | (keyword)
+1196058030                          | Lsurf
+
+YDUPLICATE
+0.0
+
+SCALE
+1.0  1.0  1.0
+
+TRANSLATE
+0.0  0.0  0.0
+
+ANGLE
+0.000                         | dAinc
+
+
+#______________
+SECTION                                                     |  (keyword)
+0.0000    0.0000    0.0000    BODY_ROOT_CHORD   0.000    BODY_SPAN_N    3   | Xle Yle Zle   Chord Ainc   [ Nspan Sspace ]
+
+AFIL 0.0 1.0
+BODY_AIRFOIL
+
+#______________
+SECTION                                                     |  (keyword)
+TRANSITION_X_OFFSET    TRANSITION_Y_OFFSET    0.0000    TRANSITION_CHORD   0.000    TRANSITION_SPAN_N    1   | Xle Yle Zle   Chord Ainc   [ Nspan Sspace ]
+
+AFIL 0.0 1.0
+BODY_AIRFOIL
+
+#______________
+SECTION                                                     |  (keyword)
+WING_X_OFFSET    WING_Y_OFFSET    0.000	    WING_CHORD_ROOT     0.000   WING_SPAN_N    1   | Xle Yle Zle   Chord Ainc   [ Nspan Sspace ]
+
+AFIL 0.0 1.0
+WING_AIRFOIL
+
+#______________
+SECTION                                                     |  (keyword)
+TIP_X_OFFSET    FULL_SPAN    0.0000    WING_CHORD_TIP   TWIST   12    1   | Xle Yle Zle   Chord Ainc   [ Nspan Sspace ]
+
+AFIL 0.0 1.0
+WING_AIRFOIL
+
+
+
