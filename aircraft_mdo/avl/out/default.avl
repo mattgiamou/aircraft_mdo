@@ -1,7 +1,7 @@
 MDO_Template
 0.0                          | Mach
 0     0     0.0              | iYsym  iZsym  Zsym
-0.793932667397      0.567094762427      1.4  | Sref   Cref   Bref
+0.775932667397      0.55423761957      1.4  | Sref   Cref   Bref
 0.259     0.000     0.002    | Xref   Yref   Zref
 0.04                         | CDp
 
@@ -46,14 +46,14 @@ SECTION                                                     |  (keyword)
 0.3    0.25    0.000	    0.4     0.000   14    1   | Xle Yle Zle   Chord Ainc   [ Nspan Sspace ]
 
 AFIL 0.0 1.0
-avl/airfoils/e330.dat
+avl/airfoils/MILEY_M06-13-128.dat
 
 #______________
 SECTION                                                     |  (keyword)
-0.46378660542    0.7    0.0000    0.24   4.0   12    1   | Xle Yle Zle   Chord Ainc   [ Nspan Sspace ]
+0.75    0.7    0.0000    0.2   -4.0   12    1   | Xle Yle Zle   Chord Ainc   [ Nspan Sspace ]
 
 AFIL 0.0 1.0
-avl/airfoils/e330.dat
+avl/airfoils/MILEY_M06-13-128.dat
 
 
 

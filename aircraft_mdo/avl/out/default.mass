@@ -1,6 +1,6 @@
 #-------------------------------------------------
 #
-#   config4
+#   default
 #
 #  Dimensional unit and parameter data.
 #  Mass & Inertia breakdown.
@@ -26,5 +26,12 @@ rho = 1.225
 #     (same orientation, same origin location, same length units)
 #
 #     mass          x          y          z        Ixx        Iyy        Izz        Ixy        Ixz        Iyz 
-#         1      0.418   3.08e-17    0.00348     0.0684     0.0252     0.0935          0    0.00083          0 ! default
-          1        0.1          0          0      0.000      0.000      0.000 ! 
+#    BODY_MASS  BODY_X  BODY_Y  0.0000   0.00126   0.00790   0.00000        ! Body_Left 
+#    BODY_MASS  BODY_X -BODY_Y  0.0000   0.00126   0.00790   0.00000        ! Body_Right 
+#    TRANS_MASS  TRANS_X  TRANS_Y  0.0000   0.00120   0.00650   0.00000        ! Trans_Left 
+#    TRANS_MASS  TRANS_X -TRANS_Y  0.0000   0.00120   0.00650   0.00000        ! Trans_Right 
+#    WING_MASS  WING_X  WING_Y  0.0000   0.00658   0.01015   0.00000        ! Wing_Left 
+#    WING_MASS  WING_X -WING_Y  0.0000   0.00658   0.01015   0.00000        ! Wing_Right 
+
+         1      0.418   3.08e-17    0.00348     0.0684     0.0252     0.0935          0    0.00083          0 ! config4_Wing
+         1        0.1          0          0      0.000      0.000      0.000 ! 

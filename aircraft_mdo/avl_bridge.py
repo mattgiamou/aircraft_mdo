@@ -13,7 +13,7 @@ from time import time
 
 # Reg. expression for AVL console
 avl_expect = '[crs]>'
-default_file = 'avl/eppler330_config_no_tail'
+default_file = 'avl/out/default'
 
 class AVL():
     
@@ -123,7 +123,7 @@ if __name__ == '__main__':
         run_output = avl.run()
         #print run_output
         
-    with AVL('avl/eppler330_naca0010_config_no_tail') as avl:
+    with AVL(default_file) as avl:
         N = 11
         alpha = np.linspace(0, 10, N)
         CL = np.zeros(alpha.shape)
