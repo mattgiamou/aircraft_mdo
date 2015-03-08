@@ -63,17 +63,17 @@ def bodycg(cbody,bbody,bodysweep,ytran):
     return cg
 
 def trancg(ytran,cwing,cbody,bbody,sweepbody,xwing):
-	b = cbody - (bbody-ytran)*sin(sweepbody)
-	h = ytran
-	a = cwing
-	temp1 = xwing - (bbody-ytran)*sin(sweepbody)
-	c = (ytran**2 + temp1**2)**0.5
-	temp2 = cbody - cwing - xwing
-	d = (ytran**2 + temp2**2)**0.5
-	xbar = b/2 + (2*a+b)*(c**2-d**2)/6/(b**2-a**2)
-	ybar = (b+2*a)*h/(3*(a+b))
-	cg = (xbar,ybar)
-	return cg
+    b = cbody - (bbody-ytran)*tan(sweepbody)
+    h = ytran
+    a = cwing
+    temp1 = xwing - (bbody-ytran)*tan(sweepbody)
+    d = (ytran**2 + temp1**2)**0.5
+    temp2 = cbody - cwing - xwing
+    c = (ytran**2 + temp2**2)**0.5
+    xbar = b/2 + (2*a+b)*(c**2-d**2)/6/(b**2-a**2)
+    ybar = (b+2*a)*h/(3*(a+b))
+    cg = (xbar,ybar)
+    return cg
 
 def wingIxx(bwing,lambdawing,cwing):
 	h = bwing
@@ -110,7 +110,7 @@ def tranIxx(ytran,cwing,cbody,bbody,sweepbody):
 
 def tranIyy(ytran,cwing,cbody,bbody,sweepbody,xwing):
 	a = cwing
-	b = cbody - (bbody-ytran)*tann(sweepbody)
+	b = cbody - (bbody-ytran)*tan(sweepbody)
 	h = ytran
 	c = cbody - cwing - xwing
 	Iyy = h*(4*a*b*c**2 + 3*a**2*b*c - 3*a*b**2*c + a**4 + b**4 + 2*a**3*b + \
@@ -164,8 +164,9 @@ def cgfromnose(bwing,lambdawing,sweepwing,cwing,cbody,bbody,bodysweep,ytran,
      nosebodycgx = cbody - bodycgx 
      nosebodycgy = bodycgy
      trancgx, trancgy = trancg(ytran,cwing,cbody,bbody,bodysweep,xwing)
-     nosetrancgx = trancgy + bbody - ytran
-     nosetrancgy = trancgy - cbody
+     nosetrancgx = cbody-trancgx
+     # FIX LINE BELOW
+     nosetrancgy = bbody - ytran + trancgy 
      wingcgx, wingcgy = wingcg(bwing,lambdawing,sweepwing,cwing)
      nosewingcgx = bbody + wingcgy
      c = cbody - cwing - xwing
