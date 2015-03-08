@@ -10,7 +10,8 @@ default_wing_airfoil = 'avl/airfoils/MILEY_M06-13-128.dat'
 default_body_airfoil = 'avl/airfoils/e330.dat'
 avl_file_out = 'avl/out/default.avl'
 mass_file_out = 'avl/out/default.mass'
-default_density = 0.3 # kg/m^2
+default_density = 78.0 # kg/m^3
+
 def compute_mass():
     """ Used to estimate the empty mass of the plane. Should scale up with 
     surface area of body and wings in some principled manner. 
@@ -265,43 +266,45 @@ def write_avl_files(body_chord, body_span, body_sweep, wing_chord, wing_span,
                        wing_sweep*np.pi/180.0)
     Izz_wing = wingIzz(wing_span, wing_taper, wing_chord, 
                        wing_sweep*np.pi/180.0)
-    
+    s_density = 0.0533*c_ref*density
     # Create the .avl file by filling in the template
     with open(mass_file_template, 'r') as f_mass:
         s_mass = f_mass.read()
-        s_mass_out = s_mass.replace('BODY_MASS', str(s_body*density)).\
+        s_mass_out = s_mass.replace('BODY_MASS', str(s_body*s_density)).\
                             replace('BODY_X', str(bodycgx)).\
                             replace('BODY_Y', str(bodycgy)).\
-                            replace('BODY_IXX', str(Ixx_body*density)).\
-                            replace('BODY_IYY', str(Iyy_body*density)).\
-                            replace('BODY_IZZ', str(Izz_body*density)).\
-                            replace('TRAN_MASS', str(s_tran*density)).\
+                            replace('BODY_IXX', str(Ixx_body*s_density)).\
+                            replace('BODY_IYY', str(Iyy_body*s_density)).\
+                            replace('BODY_IZZ', str(Izz_body*s_density)).\
+                            replace('TRAN_MASS', str(s_tran*s_density)).\
                             replace('TRAN_X', str(trancgx)).\
                             replace('TRAN_Y', str(trancgy)).\
-                            replace('TRAN_IXX', str(Ixx_tran*density)).\
-                            replace('TRAN_IYY', str(Iyy_tran*density)).\
-                            replace('TRAN_IZZ', str(Izz_tran*density)).\
-                            replace('WING_MASS', str(s_wing*density)).\
+                            replace('TRAN_IXX', str(Ixx_tran*s_density)).\
+                            replace('TRAN_IYY', str(Iyy_tran*s_density)).\
+                            replace('TRAN_IZZ', str(Izz_tran*s_density)).\
+                            replace('WING_MASS', str(s_wing*s_density)).\
                             replace('WING_X', str(wingcgx)).\
                             replace('WING_Y', str(wingcgy)).\
-                            replace('WING_IXX', str(Ixx_wing*density)).\
-                            replace('WING_IYY', str(Iyy_wing*density)).\
-                            replace('WING_IZZ', str(Izz_wing*density))
+                            replace('WING_IXX', str(Ixx_wing*s_density)).\
+                            replace('WING_IYY', str(Iyy_wing*s_density)).\
+                            replace('WING_IZZ', str(Izz_wing*s_density))
 
         with open(mass_file, 'w') as f_mass_out:
             f_mass_out.write(s_mass_out)
-    return 
+            
+    # TODO: return S_ref, c_ref, mass, etc.
+    return (s_ref, c_ref, s_ref*s_density)
     
 if __name__ == '__main__':
     body_chord = 0.8
     body_span = 0.25
-    body_sweep = 15.0
-    wing_chord = 0.4
+    body_sweep = 12.0
+    wing_chord = 0.3
     wing_span = 0.45
-    wing_x_offset = 0.3
-    wing_sweep = 35.0
-    wing_taper = 0.5
-    wing_twist = -4.0
-    write_avl_files(body_chord, body_span, body_sweep, wing_chord, wing_span,
+    wing_x_offset = 0.4
+    wing_sweep = 20.0
+    wing_taper = 0.6
+    wing_twist = -3.0
+    print write_avl_files(body_chord, body_span, body_sweep, wing_chord, wing_span,
                     wing_x_offset, wing_sweep, wing_taper, wing_twist)
     

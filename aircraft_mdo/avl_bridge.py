@@ -3,6 +3,7 @@ Athena Vortex Lattice (AVL) wrapper using pexpect library.
 AVL must be installed and on the path.
 
 TODO: Make XFOIL version as well!!
+TODO: Create standard configuration geometry code (like bwb_geometry.py).
 """
 
 import pexpect
@@ -25,6 +26,8 @@ class AVL():
         self.p = pexpect.spawn('avl ' + avl_filename)
         # Ready the AVL process for execution
         self.expect() # The first instance of c>
+        self.p.sendline('mset 0') # Set the c.g. from the mass file
+        self.expect()
         self.p.sendline('oper')
         self.expect()
         
@@ -124,12 +127,12 @@ if __name__ == '__main__':
         #print run_output
         
     with AVL(default_file) as avl:
-        N = 11
-        alpha = np.linspace(0, 10, N)
+        N = 5
+        alpha = np.linspace(0, 6, N)
         CL = np.zeros(alpha.shape)
         CD = np.zeros(CL.shape)
         CM = np.zeros(CL.shape)
-        avl.set_parameter('v', 15)
+        avl.set_parameter('v', 11)
         #avl.set_parameter('x', 0.2)
         for idx in xrange(0, N):
             t = time()
@@ -138,7 +141,7 @@ if __name__ == '__main__':
             CL[idx] = cl
             CD[idx] = cd
             CM[idx] = cm
-            #print "Static margin: ", str(-cma/cla), '\n'
+            print "Static margin: ", str(-cma/cla), '\n'
             #print 'Time: ', (time()-t), ' s\n'
         plt.figure()
         plt.plot(alpha, CL)
