@@ -10,15 +10,16 @@ default_wing_airfoil = 'avl/airfoils/MILEY_M06-13-128.dat'
 default_body_airfoil = 'avl/airfoils/e330.dat'
 avl_file_out = 'avl/out/default.avl'
 mass_file_out = 'avl/out/default.mass'
-default_density = 78.0 # kg/m^3
+default_density = 60.0 # kg/m^3
 
-def compute_mass():
+def compute_mass(struct_mass, n_golf_balls=13):
     """ Used to estimate the empty mass of the plane. Should scale up with 
     surface area of body and wings in some principled manner. 
     """
-    electronics = 0.3
-    mass = electronics
-    return mass
+    non_structural_mass = 0.326 #kg
+    ball_mass = n_golf_balls*0.04593
+    return non_structural_mass + ball_mass + struct_mass
+    
     
 def compute_ref_area(body_chord, body_span, tran_chord, tran_span, wing_chord,
                      wing_span, wing_tip_chord):
@@ -179,7 +180,8 @@ def write_avl_files(body_chord, body_span, body_sweep, wing_chord, wing_span,
                     wing_x_offset, wing_sweep, wing_taper, wing_twist, 
                     transition=0.1, wing_airfoil=default_wing_airfoil,
                     body_airfoil=default_body_airfoil, avl_file=avl_file_out,
-                    mass_file=mass_file_out, density=default_density):
+                    mass_file=mass_file_out, density=default_density,
+                    n_balls=13):
     """
     Creates .avl and .mass files for AVL. All units are meters and degrees.
     All spanwise (y-directional) variables are half spans. 
@@ -197,6 +199,10 @@ def write_avl_files(body_chord, body_span, body_sweep, wing_chord, wing_span,
     wing_twist - twist of the wing tip at its end, linearly interpolated
     transition - spanwise length of transition between wing and body
     -------
+    Returns
+    s_ref - total planiforma surface area
+    c_ref - mean chord length
+    mass_total - total mass 
     """
     # Compute geometry
     tran_y = body_span-transition
@@ -267,6 +273,7 @@ def write_avl_files(body_chord, body_span, body_sweep, wing_chord, wing_span,
     Izz_wing = wingIzz(wing_span, wing_taper, wing_chord, 
                        wing_sweep*np.pi/180.0)
     s_density = 0.0533*c_ref*density
+    struct_mass = s_density*s_ref
     # Create the .avl file by filling in the template
     with open(mass_file_template, 'r') as f_mass:
         s_mass = f_mass.read()
@@ -292,19 +299,21 @@ def write_avl_files(body_chord, body_span, body_sweep, wing_chord, wing_span,
         with open(mass_file, 'w') as f_mass_out:
             f_mass_out.write(s_mass_out)
             
+    total_mass = compute_mass(struct_mass, n_balls)
     # TODO: return S_ref, c_ref, mass, etc.
-    return (s_ref, c_ref, s_ref*s_density)
+    return (s_ref, c_ref, total_mass)
     
 if __name__ == '__main__':
     body_chord = 0.8
     body_span = 0.25
     body_sweep = 12.0
-    wing_chord = 0.3
+    wing_chord = 0.4
     wing_span = 0.45
     wing_x_offset = 0.4
-    wing_sweep = 20.0
+    wing_sweep = 30.0
     wing_taper = 0.6
     wing_twist = -3.0
-    print write_avl_files(body_chord, body_span, body_sweep, wing_chord, wing_span,
-                    wing_x_offset, wing_sweep, wing_taper, wing_twist)
+    print write_avl_files(body_chord, body_span, body_sweep, wing_chord, 
+                          wing_span, wing_x_offset, wing_sweep, wing_taper, 
+                          wing_twist)
     

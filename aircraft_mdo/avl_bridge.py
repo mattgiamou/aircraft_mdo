@@ -77,7 +77,7 @@ class AVL():
         CL = self.get_output_val(output, 'CLtot')
         CD = self.get_output_val(output, 'CDtot')
         CM = self.get_output_val(output, 'Cmtot')
-        
+        e = self.get_output_val(output, 'e')
         # Extract stability derivatives
         self.p.sendline('st')
         self.expect()
@@ -88,7 +88,7 @@ class AVL():
         CL_alpha = self.get_output_val(stab_output, 'CLa')*np.pi/180.0
         CM_alpha = self.get_output_val(stab_output, 'Cma')*np.pi/180.0
         
-        return (CL, CD, CM, CL_alpha, CM_alpha)
+        return (CL, CD, CM, CL_alpha, CM_alpha, e)
         
         
     def get_output_val(self, output, var):
@@ -113,11 +113,22 @@ class AVL():
         """
         self.p.close(force=True)
         
+def avl_analysis(filename=default_file):
+    """
+    Compute moment and lift vs. alpha as well as static margin, surface area, 
+    mean chord, etc. 
+    """
+    with AVL(filename) as avl:
+        avl.set_constraint('a', 'a', 0.0)
+        cl0,cd0,cm0,cla0,cma0 = avl.run()
+        
+    return (cl0, cm0, cla0, cma0)
+        
 if __name__ == '__main__':
     # Test basic functionality (with ensures that the AVL process is closed on 
     # exit)
     with AVL() as avl:
-        param_output = avl.set_parameter('CD', 0.02)
+        param_output = avl.set_parameter('CD', 0.04)
         #print param_output
         constraint_output = avl.set_constraint('a', 'a', 0.5)
         #print constraint_output
@@ -127,27 +138,44 @@ if __name__ == '__main__':
         #print run_output
         
     with AVL(default_file) as avl:
-        N = 5
-        alpha = np.linspace(0, 6, N)
+        N = 11
+        alpha = np.linspace(0, 10, N)
         CL = np.zeros(alpha.shape)
         CD = np.zeros(CL.shape)
         CM = np.zeros(CL.shape)
+        E = np.zeros(CL.shape)
         avl.set_parameter('v', 11)
         #avl.set_parameter('x', 0.2)
         for idx in xrange(0, N):
             t = time()
             avl.set_constraint('a','a',alpha[idx])
-            cl,cd,cm,cla,cma = avl.run()
+            cl,cd,cm,cla,cma, e = avl.run()
             CL[idx] = cl
             CD[idx] = cd
             CM[idx] = cm
+            E[idx] = e
             print "Static margin: ", str(-cma/cla), '\n'
             #print 'Time: ', (time()-t), ' s\n'
+            
+#        avl.set_constraint('a', 'a', 0.0)
+#        cl0,cd0,cm0,cla0,cma0 = avl.run()
+#        avl.set_constraint('a', 'a', 5.0)
+#        cl1,cd1,cm1,cla1,cma1 = avl.run()
+#        print "CL0: ", cl0, '\n'
+#        print "Cma_0: ", cma0, '\n'
+#        print "CLa_0: ", cla0, '\n'
+#        print "Cma avg: ", (cm1-cm0)/5.0, '\n'
+#        print "CLa avg: ", (cl1-cl0)/5.0, '\n'
+#        print "Cma_1: ", cma1, '\n'
+#        print "CLa_1: ", cla1, '\n'
+        
+        
         plt.figure()
         plt.plot(alpha, CL)
         plt.grid()
         plt.plot(alpha,CD)
         plt.plot(alpha, CM)
+        plt.plot(alpha, E)
         plt.xlabel('alpha (deg)')
-        plt.legend(('CL','CD','CM'))
+        plt.legend(('CL','CD','CM', 'e'))
         
