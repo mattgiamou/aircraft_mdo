@@ -1,6 +1,6 @@
 #-------------------------------------------------
 #
-#   config4
+#   default
 #
 #  Dimensional unit and parameter data.
 #  Mass & Inertia breakdown.
@@ -25,6 +25,10 @@ rho = 1.225
 #  x,y,z system here must be exactly the same one used in the .avl input file
 #     (same orientation, same origin location, same length units)
 #
-#     mass          x          y          z        Ixx        Iyy        Izz        Ixy        Ixz        Iyz 
-         1      0.418   3.08e-17    0.00348     0.0684     0.0252     0.0935          0    0.00083          0 ! config4_Wing
-         1        0.1          0          0      0.000      0.000      0.000 ! 
+#mass          x          y          z        Ixx        Iyy        Izz        
+BODY_MASS    BODY_X    BODY_Y    0.0000    BODY_IXX    BODY_IYY    BODY_IZZ !Body_Left
+BODY_MASS    BODY_X   -BODY_Y    0.0000    BODY_IXX    BODY_IYY    BODY_IZZ !Body_Right
+TRAN_MASS    TRAN_X    TRAN_Y    0.0000    TRAN_IXX    TRAN_IYY    TRAN_IZZ !Tran_Left
+TRAN_MASS    TRAN_X   -TRAN_Y    0.0000    TRAN_IXX    TRAN_IYY    TRAN_IZZ !Tran_Right
+WING_MASS    WING_X    WING_Y    0.0000    WING_IXX    WING_IYY    WING_IZZ !Wing_Left
+WING_MASS    WING_X   -WING_Y    0.0000    WING_IXX    WING_IYY    WING_IZZ !Wing_Right
