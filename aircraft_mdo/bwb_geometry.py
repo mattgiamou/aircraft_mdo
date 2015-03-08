@@ -102,7 +102,7 @@ def wingIzz(bwing,lambdawing,cwing, sweepwing):
 	return Izz
 
 def tranIxx(ytran,cwing,cbody,bbody,sweepbody):
-	b = cbody - (bbody-ytran)*sin(sweepbody)
+	b = cbody - (bbody-ytran)*tan(sweepbody)
 	h = ytran
 	a = cwing
 	Ixx = h**3*(a**2+4*a*b+b**2)/(36*(a+b))
@@ -110,7 +110,7 @@ def tranIxx(ytran,cwing,cbody,bbody,sweepbody):
 
 def tranIyy(ytran,cwing,cbody,bbody,sweepbody,xwing):
 	a = cwing
-	b = cbody - (bbody-ytran)*sin(sweepbody)
+	b = cbody - (bbody-ytran)*tann(sweepbody)
 	h = ytran
 	c = cbody - cwing - xwing
 	Iyy = h*(4*a*b*c**2 + 3*a**2*b*c - 3*a*b**2*c + a**4 + b**4 + 2*a**3*b + \
@@ -120,7 +120,7 @@ def tranIyy(ytran,cwing,cbody,bbody,sweepbody,xwing):
 
 def tranIzz(ytran,cwing,cbody,bbody,sweepbody,xwing):
 	a = cwing
-	b = cbody - (bbody-ytran)*sin(sweepbody)
+	b = cbody - (bbody-ytran)*tan(sweepbody)
 	h = ytran
 	c = cbody - cwing - xwing
 	Izz = h*(4*h**2*a*b + h**2*b**2 + h**2*a**2 + 4*a*b*c**2 + 3*a**2*b*c - \
@@ -129,14 +129,14 @@ def tranIzz(ytran,cwing,cbody,bbody,sweepbody,xwing):
 	return Izz
 
 def bodyIxx(bbody,ytran,cbody,sweepbody):
-	a = cbody - (bbody-ytran)*sin(sweepbody)
+	a = cbody - (bbody-ytran)*tan(sweepbody)
 	h = bbody-ytran
 	b = cbody
 	Ixx = h**3*(a**2+4*a*b+b**2)/(36*(a+b))
 	return Ixx
 
 def bodyIyy(bbody,xtran,cbody,sweepbody):
-	a = cbody - (bbody-xtran)*sin(sweepbody)
+	a = cbody - (bbody-xtran)*tan(sweepbody)
 	h = bbody-xtran
 	b = cbody
 	c = 0 #THIS IS A DIFFERENT C FROM THE CG CALCULATIONS
@@ -145,7 +145,7 @@ def bodyIyy(bbody,xtran,cbody,sweepbody):
 	return Iyy
 
 def bodyIzz(bbody,ytran,cbody,sweepbody):
-	a = cbody - (bbody-ytran)*sin(sweepbody)
+	a = cbody - (bbody-ytran)*tan(sweepbody)
 	h = bbody-ytran
 	b = cbody
 	c = 0 #THIS IS A DIFFERENT C FROM THE CG CALCULATIONS
@@ -244,17 +244,20 @@ def write_avl_files(body_chord, body_span, body_sweep, wing_chord, wing_span,
      trancgy,wingcgx, wingcgy) = cgfromnose(wing_span, wing_taper,
                                             wing_sweep*np.pi/180.0, wing_chord, 
                                             body_chord, body_span, 
-                                            body_sweep*np.pi/180.0, tran_y,
+                                            # Swapped tran_y for transition
+                                            body_sweep*np.pi/180.0, transition,
                                             wing_x_offset)
     
-    Ixx_body = bodyIxx(body_span, tran_y, body_chord, body_sweep*np.pi/180.0)
-    Iyy_body = bodyIyy(body_span, tran_x, body_chord, body_sweep*np.pi/180.0)
-    Izz_body = bodyIzz(body_span, tran_y, body_chord, body_sweep*np.pi/180.0)
-    Ixx_tran = tranIxx(tran_y, wing_chord, body_chord, body_span, 
+    Ixx_body = bodyIxx(body_span, transition, body_chord, 
                        body_sweep*np.pi/180.0)
-    Iyy_tran = tranIyy(tran_y, wing_chord, body_chord, body_span, 
+    Iyy_body = bodyIyy(body_span, tran_x, body_chord, body_sweep*np.pi/180.0)
+    Izz_body = bodyIzz(body_span, transition, body_chord, 
+                       body_sweep*np.pi/180.0)
+    Ixx_tran = tranIxx(transition, wing_chord, body_chord, body_span, 
+                       body_sweep*np.pi/180.0)
+    Iyy_tran = tranIyy(transition, wing_chord, body_chord, body_span, 
                        body_sweep*np.pi/180.0, wing_x_offset)
-    Izz_tran = tranIzz(tran_y, wing_chord, body_chord, body_span, 
+    Izz_tran = tranIzz(transition, wing_chord, body_chord, body_span, 
                        body_sweep*np.pi/180.0, wing_x_offset)                               
     Ixx_wing = wingIxx(wing_span, wing_taper, wing_chord)
     Iyy_wing = wingIyy(wing_span, wing_taper, wing_chord, 
