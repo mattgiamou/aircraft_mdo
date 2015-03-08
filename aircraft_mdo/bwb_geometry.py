@@ -51,15 +51,16 @@ def wingcg(bwing,lambdawing,sweepwing,cwing):
 
 
 def bodycg(cbody,bbody,bodysweep,ytran):
-	a = cbody - (bbody-ytran)*tan(bodysweep)
-	b = cbody
-	c = (bbody-ytran)
-	d = (bbody-ytran)/2*cos(bodysweep)
-	h = bbody-ytran
-	xbar = b/2 + (2*a+b)*(c**2-d**2)/6/(b**2-a**2)
-	ybar = (b+2*a)*h/(3*(a+b))
-	cg = (xbar,ybar)
-	return cg
+    a = cbody - (bbody-ytran)*tan(bodysweep)
+    b = cbody
+    c = (bbody-ytran)
+    #d = (bbody-ytran)/2*cos(bodysweep)
+    d = c/cos(bodysweep)
+    h = bbody-ytran
+    xbar = b/2 + (2*a+b)*(c**2-d**2)/6/(b**2-a**2)
+    ybar = (b+2*a)*h/(3*(a+b))
+    cg = (xbar,ybar)
+    return cg
 
 def trancg(ytran,cwing,cbody,bbody,sweepbody,xwing):
 	b = cbody - (bbody-ytran)*sin(sweepbody)
@@ -160,8 +161,8 @@ def cgfromnose(bwing,lambdawing,sweepwing,cwing,cbody,bbody,bodysweep,ytran,
      Returns cgs of sections relative to nose (aircraft frame in AVL)
      """
      bodycgx, bodycgy = bodycg(cbody,bbody,bodysweep,ytran)
-     nosebodycgx = bodycgy
-     nosebodycgy = bodycgx - cbody
+     nosebodycgx = cbody - bodycgx 
+     nosebodycgy = bodycgy
      trancgx, trancgy = trancg(ytran,cwing,cbody,bbody,bodysweep,xwing)
      nosetrancgx = trancgy + bbody - ytran
      nosetrancgy = trancgy - cbody
