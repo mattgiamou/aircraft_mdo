@@ -34,21 +34,20 @@ def compute_ref_area(body_chord, body_span, tran_chord, tran_span, wing_chord,
 # ALL POSITIONS AS CALCULATED FROM THE LOWER RIGHT CORNER OF EACH TRAPEZOID AS 
 # YOU SEE FROM THE DIAGRAM GIVEN TO ME
 def wingcg(bwing,lambdawing,sweepwing,cwing):
-	"""
-     Returns cg location as measured from the lower right corner of the 
-     trapezoid.
-     """
-	h = bwing
-	a = lambdawing*cwing
-	b = cwing
-	temp1 = cwing-a-bwing*sin(sweepwing)
-	c = (bwing**2 + temp1**2)**0.5
-	d = bwing/2*cos(sweepwing)
-	xbar = b/2 + (2*a+b)*(c**2-d**2)/6/(b**2-a**2)
-	ybar = (b+2*a)*h/(3*(a+b))
-	cg = (xbar,ybar)
-	return cg
-
+    """
+    Returns cg location as measured from the lower right corner of the 
+    trapezoid.
+    """
+    h = bwing
+    a = lambdawing*cwing
+    b = cwing
+    temp1 = cwing-a-bwing*sin(sweepwing)
+    c = (bwing**2 + temp1**2)**0.5
+    d = bwing/2*cos(sweepwing)
+    xbar = b/2 + (2*a+b)*(c**2-d**2)/6/(b**2-a**2)
+    ybar = (b+2*a)*h/(3*(a+b))
+    cg = (xbar,ybar)
+    return cg
 
 def bodycg(cbody,bbody,bodysweep,ytran):
     a = cbody - (bbody-ytran)*tan(bodysweep)
@@ -168,9 +167,8 @@ def cgfromnose(bwing,lambdawing,sweepwing,cwing,cbody,bbody,bodysweep,ytran,
      # FIX LINE BELOW
      nosetrancgy = bbody - ytran + trancgy 
      wingcgx, wingcgy = wingcg(bwing,lambdawing,sweepwing,cwing)
-     nosewingcgx = bbody + wingcgy
-     c = cbody - cwing - xwing
-     nosewingcgy = -cbody + c + wingcgx
+     nosewingcgx = xwing + tan(sweepwing)*bwing + lambdawing*cwing - wingcgx
+     nosewingcgy = bbody + wingcgy
      return (nosebodycgx, nosebodycgy, nosetrancgx, nosetrancgy, \
              nosewingcgx, nosewingcgy)
     
@@ -209,7 +207,7 @@ def write_avl_files(body_chord, body_span, body_sweep, wing_chord, wing_span,
     tran_span_n = int(round(3.0*(transition)/0.1))
     wing_span_n = int(round(3.0*wing_span/0.1))
          
-    (s_body, s_tran, s_wing) = compute_ref_area(body_chord, body_span, tran_c, 
+    (s_body, s_tran, s_wing) = compute_ref_area(body_chord, tran_y, tran_c, 
                                                 transition, wing_chord, 
                                                 wing_span, wing_tip_c)
     s_ref = 2.0*(s_body+s_tran+s_wing)
