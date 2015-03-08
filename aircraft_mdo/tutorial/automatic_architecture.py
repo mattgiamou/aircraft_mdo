@@ -4,7 +4,6 @@ from openmdao.lib.optproblems.sellar import Discipline1, Discipline2
 class SellarProblem(ArchitectureAssembly):
     """ Sellar test problem definition.
     Creates a new Assembly with this problem
-
     Optimal Design at (1.9776, 0, 0)
     Optimal Objective = 3.18339"""
 

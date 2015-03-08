@@ -301,7 +301,7 @@ def write_avl_files(body_chord, body_span, body_sweep, wing_chord, wing_span,
             
     total_mass = compute_mass(struct_mass, n_balls)
     # TODO: return S_ref, c_ref, mass, etc.
-    return (s_ref, c_ref, total_mass)
+    return (s_ref, c_ref, b_ref, total_mass)
     
 if __name__ == '__main__':
     body_chord = 0.8

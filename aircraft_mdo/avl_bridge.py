@@ -169,7 +169,6 @@ if __name__ == '__main__':
 #        print "Cma_1: ", cma1, '\n'
 #        print "CLa_1: ", cla1, '\n'
         
-        
         plt.figure()
         plt.plot(alpha, CL)
         plt.grid()

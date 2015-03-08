@@ -4,7 +4,6 @@ Call CruiseAnalysis(V_Cruise,W,S,rh0,CLa,CL0) to obtain Cruise CL,and the
 required alpha given motocalc and AVL/XFLR5 lift slope info.
 """
 
-import math
 import numpy as np
 from matplotlib import pyplot as plt
 rho = 1.225
@@ -15,10 +14,7 @@ T = [6.50,6.25,6.00,5.75,5.50,5.20,4.80,4.40,4.20]
 V_interp = np.arange(0,15.0,0.1)    #Arbitrarily set.
 T_interp = np.interp(V_interp,V,T)
 
-def solve_cruise(mass,S,b,CLa,CL0,CD0):
-    
-
-def CruiseAnalysis(V_Cruise,W,S,CLa,CL0):
+def alpha_cruise(V_Cruise,W,S,CLa,CL0):
 	#V_Cruise = 15.5; #m/s (from motoCalc)
 	#W = 2*9.8;      #kg
 	#S = 0.62;   #m**2
@@ -27,17 +23,15 @@ def CruiseAnalysis(V_Cruise,W,S,CLa,CL0):
 	#Using input arguments we calcuate
 	#the required CL for steady level flight.
 	CL=CL_Cruise(W,S,V_Cruise)
-
 	alphaCruise = CruiseAlpha(CL0,CLa,CL) #in degrees
-	return [CL,alphaCruise]
+	return (CL,alphaCruise)
 
 def CL_Cruise(W,S,V_Cruise):
 	CL = 2*W/(S*rho*V_Cruise**2)
 	return CL
 	
 def CruiseAlpha(CL0,CLa,CL):
-	pi = math.pi
-	alpha = (CL-CL0)/CLa*180/pi
+	alpha = (CL-CL0)/CLa*180/np.pi
 	return alpha
 
 def maxSpeedWithThrust(CD0,b,S,CLa,CL0,alpha,e=0.8):
@@ -78,5 +72,5 @@ if __name__ == '__main__':
     rho = 1.225
     CLa = 3.2659
     CL0 = -0.02
-    CL_Cruise,alphaCruise = CruiseAnalysis(V_Cruise,W,S,CLa,CL0)
+    CL_Cruise,alphaCruise = alpha_cruise(V_Cruise,W,S,CLa,CL0)
     print CL_Cruise, alphaCruise
