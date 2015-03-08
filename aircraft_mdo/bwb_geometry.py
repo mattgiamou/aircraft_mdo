@@ -39,9 +39,9 @@ def wingcg(bwing,lambdawing,sweepwing,cwing):
      trapezoid.
      """
 	h = bwing
-	a = lambdawing
+	a = lambdawing*cwing
 	b = cwing
-	temp1 = cwing-lambdawing-bwing*sin(sweepwing)
+	temp1 = cwing-a-bwing*sin(sweepwing)
 	c = (bwing**2 + temp1**2)**0.5
 	d = bwing/2*cos(sweepwing)
 	xbar = b/2 + (2*a+b)*(c**2-d**2)/6/(b**2-a**2)
@@ -51,7 +51,7 @@ def wingcg(bwing,lambdawing,sweepwing,cwing):
 
 
 def bodycg(cbody,bbody,bodysweep,ytran):
-	a = cbody - (bbody-ytran)*sin(bodysweep)
+	a = cbody - (bbody-ytran)*tan(bodysweep)
 	b = cbody
 	c = (bbody-ytran)
 	d = (bbody-ytran)/2*cos(bodysweep)
@@ -76,25 +76,25 @@ def trancg(ytran,cwing,cbody,bbody,sweepbody,xwing):
 
 def wingIxx(bwing,lambdawing,cwing):
 	h = bwing
-	a = lambdawing
+	a = lambdawing*cwing
 	b = cwing
 	Ixx = h**3*(a**2+4*a*b+b**2)/(36*(a+b))
 	return Ixx
 
 def wingIyy(bwing,lambdawing,cwing,sweepwing):
-	a = lambdawing
+	a = lambdawing*cwing
 	b = cwing
 	h = bwing
-	c = cwing - lambdawing - bwing*sin(sweepwing)
+	c = cwing - a - bwing*sin(sweepwing)
 	Iyy = h*(4*a*b*c**2 + 3*a**2*b*c - 3*a*b**2*c + a**4 + b**4 + 2*a**3*b + \
               a**2*c**2 + a**3*c + 2*a*b**3 - c*b**3 + b**2*c**2)/36/(a+b)
 	return Iyy
 
 def wingIzz(bwing,lambdawing,cwing, sweepwing):
-	a = lambdawing
+	a = lambdawing*cwing
 	b = cwing
 	h = bwing
-	c = cwing - lambdawing - bwing*sin(sweepwing)
+	c = cwing - a - bwing*sin(sweepwing)
 	Izz = h*(4*h**2*a*b + h**2*b**2 + h**2*a**2 + 4*a*b*c**2 + 3*a**2*b*c - \
               3*a*b**2*c + a**4 + b**4 + 2*a**3*b + a**2*c**2 + a**3*c + 2*a*b**3 - \
               b**3*c + b**2*c**2)/36/(a+b)
