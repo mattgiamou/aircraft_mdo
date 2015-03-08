@@ -41,9 +41,11 @@ def wingcg(bwing,lambdawing,sweepwing,cwing):
     h = bwing
     a = lambdawing*cwing
     b = cwing
-    temp1 = cwing-a-bwing*sin(sweepwing)
-    c = (bwing**2 + temp1**2)**0.5
-    d = bwing/2*cos(sweepwing)
+    # Was sin below...?
+    temp1 = b-a-h*tan(sweepwing)
+    c = (h**2 + temp1**2)**0.5
+    #d = bwing/2*cos(sweepwing)
+    d = bwing/cos(sweepwing)
     xbar = b/2 + (2*a+b)*(c**2-d**2)/6/(b**2-a**2)
     ybar = (b+2*a)*h/(3*(a+b))
     cg = (xbar,ybar)
@@ -167,7 +169,7 @@ def cgfromnose(bwing,lambdawing,sweepwing,cwing,cbody,bbody,bodysweep,ytran,
      # FIX LINE BELOW
      nosetrancgy = bbody - ytran + trancgy 
      wingcgx, wingcgy = wingcg(bwing,lambdawing,sweepwing,cwing)
-     nosewingcgx = xwing + tan(sweepwing)*bwing + lambdawing*cwing - wingcgx
+     nosewingcgx = xwing +  cwing - wingcgx #+ tan(sweepwing)*bwing+ lambdawing*cwing
      nosewingcgy = bbody + wingcgy
      return (nosebodycgx, nosebodycgy, nosetrancgx, nosetrancgy, \
              nosewingcgx, nosewingcgy)
@@ -297,7 +299,7 @@ if __name__ == '__main__':
     wing_chord = 0.4
     wing_span = 0.45
     wing_x_offset = 0.3
-    wing_sweep = 45.0
+    wing_sweep = 35.0
     wing_taper = 0.5
     wing_twist = -4.0
     write_avl_files(body_chord, body_span, body_sweep, wing_chord, wing_span,

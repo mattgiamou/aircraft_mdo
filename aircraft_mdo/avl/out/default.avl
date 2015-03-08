@@ -50,7 +50,7 @@ avl/airfoils/MILEY_M06-13-128.dat
 
 #______________
 SECTION                                                     |  (keyword)
-0.75    0.7    0.0000    0.2   -4.0   12    1   | Xle Yle Zle   Chord Ainc   [ Nspan Sspace ]
+0.615093392194    0.7    0.0000    0.2   -4.0   12    1   | Xle Yle Zle   Chord Ainc   [ Nspan Sspace ]
 
 AFIL 0.0 1.0
 avl/airfoils/MILEY_M06-13-128.dat
