@@ -143,17 +143,15 @@ if __name__ == '__main__':
         CL = np.zeros(alpha.shape)
         CD = np.zeros(CL.shape)
         CM = np.zeros(CL.shape)
-        E = np.zeros(CL.shape)
-        avl.set_parameter('v', 11)
+        avl.set_parameter('v', 15)
         #avl.set_parameter('x', 0.2)
         for idx in xrange(0, N):
             t = time()
             avl.set_constraint('a','a',alpha[idx])
-            cl,cd,cm,cla,cma, e = avl.run()
+            cl,cd,cm,cla,cma = avl.run()
             CL[idx] = cl
             CD[idx] = cd
             CM[idx] = cm
-            E[idx] = e
             print "Static margin: ", str(-cma/cla), '\n'
             #print 'Time: ', (time()-t), ' s\n'
             
@@ -170,11 +168,10 @@ if __name__ == '__main__':
 #        print "CLa_1: ", cla1, '\n'
         
         plt.figure()
-        plt.plot(alpha, CL)
+        plt.plot(alpha, CL/CD)
         plt.grid()
-        plt.plot(alpha,CD)
-        plt.plot(alpha, CM)
-        plt.plot(alpha, E)
+#        plt.plot(alpha,CD)
+#        plt.plot(alpha, CM)
         plt.xlabel('alpha (deg)')
-        plt.legend(('CL','CD','CM', 'e'))
-        
+        #plt.legend(('CL','CD','CM'))
+        plt.title('CL/CD vs. Alpha')        

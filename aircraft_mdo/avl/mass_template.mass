@@ -50,7 +50,7 @@ WING_MASS    WING_X   -WING_Y    0.0000    WING_IXX    WING_IYY    WING_IZZ !Win
 0.04593   0.13874       0.086   0.0   0.00004   0.00004   0.00004        ! Golf_Ball_12
 0.04593   0.13874       0.129   0.0   0.00004   0.00004   0.00004        ! Golf_Ball_13
 
-# Stuff (about 350g, yikes!)
+# Stuff (about 330g, yikes!)
 0.09	0.020	0.0 0.0 0.0 0.0 0.0 ! Motor
 0.02	0.000	0.0 0.0 0.0 0.0 0.0 ! Prop
 0.11	0.060	0.0 0.0 0.0 0.0 0.0 ! Battery

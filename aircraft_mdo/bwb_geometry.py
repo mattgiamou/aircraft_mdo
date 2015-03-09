@@ -272,6 +272,8 @@ def write_avl_files(body_chord, body_span, body_sweep, wing_chord, wing_span,
                        wing_sweep*np.pi/180.0)
     Izz_wing = wingIzz(wing_span, wing_taper, wing_chord, 
                        wing_sweep*np.pi/180.0)
+                       
+    # Approx. average thickness of e330/miley
     s_density = 0.0533*c_ref*density
     struct_mass = s_density*s_ref
     # Create the .avl file by filling in the template
@@ -304,15 +306,27 @@ def write_avl_files(body_chord, body_span, body_sweep, wing_chord, wing_span,
     return (s_ref, c_ref, b_ref, total_mass)
     
 if __name__ == '__main__':
-    body_chord = 0.8
+    # Good result 1
+#    body_chord = 0.8
+#    body_span = 0.25
+#    body_sweep = 15.0
+#    wing_chord = 0.2
+#    wing_span = 0.425
+#    wing_x_offset = 0.25
+#    wing_sweep = 15.0
+#    wing_taper = 0.8
+#    wing_twist = -2.0
+    # End good result 1
+    body_chord = 0.9
     body_span = 0.25
-    body_sweep = 12.0
-    wing_chord = 0.4
-    wing_span = 0.45
-    wing_x_offset = 0.4
-    wing_sweep = 30.0
-    wing_taper = 0.6
-    wing_twist = -3.0
+    body_sweep = 20.0
+    wing_chord = 0.3
+    wing_span = 0.3666
+    wing_x_offset = 1.0/3.0
+    wing_sweep = 5.0
+    # TAPER IS TOO LOW (was 0.3)
+    wing_taper = 0.8
+    wing_twist = -0.0
     print write_avl_files(body_chord, body_span, body_sweep, wing_chord, 
                           wing_span, wing_x_offset, wing_sweep, wing_taper, 
                           wing_twist)

@@ -10,15 +10,15 @@ from scipy.interpolate import UnivariateSpline
 
 rho = 1.225
 #alpha given in deg.
-V = [0.00,2.00,4.00,6.00,8.00,10.0,12.0,14.0,15.0]
-T = [6.50,6.25,6.00,5.75,5.50,5.20,4.80,4.40,4.20]
+V = [0.00,2.00,4.00,6.00,8.00,10.0,12.0,14.0,15.0,16.0]
+T = [6.50,6.25,6.00,5.75,5.50,5.20,4.80,4.40,4.20,3.8]
 #Interpolate the thrust curve:
-V_interp = np.arange(0,15.0,0.1)    #Arbitrarily set.
+V_interp = np.arange(0,16.0,0.1)    #Arbitrarily set.
 T_interp = np.interp(V_interp,V,T)
 #T_interp = UnivariateSpline(V,T)
 
 def cruise_residual(m, v_cruise, s_ref, cl0, cla, alpha):
-    return abs(9.81*m - 0.5*1.225*v_cruise**2*s_ref*(cl0 + cla*alpha))
+    return 9.81*m - 0.5*1.225*v_cruise**2*s_ref*(cl0 + cla*alpha)
     
 def alpha_cruise(V_Cruise,W,S,CLa,CL0):
 	#V_Cruise = 15.5; #m/s (from motoCalc)
@@ -46,14 +46,15 @@ def maxSpeedWithThrust(CD0,b,S,CLa,CL0,alpha,e=0.8):
     K = 1/(np.pi*e*AR)
     #Generate D curve
     V = V_interp
+    # Had *np.pi/180 below... probably wrong
     D = (CD0 + K*(CL0 + CLa*alpha*np.pi/180.0)**2)*S*0.5*rho*V**2
-#    plt.figure()
-#    plt.plot(V_interp, D, 'b*')
-#    plt.grid()
-#    plt.plot(V_interp, T_interp, 'r--')
-#    plt.legend(('Drag', 'Thrust Available'))
-#    plt.xlabel('V (m/s)')
-#    plt.ylabel('Force (N)')
+    plt.figure()
+    plt.plot(V_interp, D, 'b*')
+    plt.grid()
+    plt.plot(V_interp, T_interp, 'r--')
+    plt.legend(('Drag', 'Thrust Available'))
+    plt.xlabel('V (m/s)')
+    plt.ylabel('Force (N)')
     #Find the index of where delta is minimized:
     delta = abs(T_interp - D)
     V_index = np.argmin(delta)
@@ -64,16 +65,16 @@ def maxSpeedWithThrust(CD0,b,S,CLa,CL0,alpha,e=0.8):
 
 if __name__ == '__main__':
     CD0 = 0.04
-    e = 1.0
-    b = 1.3
-    S = 0.7
-    CLa = 0.0524*180/np.pi
-    CL0 = 0.01
-    alpha = 3.0
+    b = 1.2333
+    S = 0.519
+    #CLa = 0.0524*180/np.pi
+    CLa = 0.04965
+    CL0 = 0.0483
+    alpha = 3.6
     print maxSpeedWithThrust(CD0,b,S,CLa,CL0,alpha)
-    V_Cruise = 15.5 #m/s (from motoCalc)
-    W = 2*9.8      #kg
-    S = 0.62   #m**2
+    V_Cruise = 14.9 #m/s (from motoCalc)
+    W = 1.622*9.8      #kg
+    S = 0.5193   #m**2
     rh0 = 1.225
     rho = 1.225
     CLa = 3.2659

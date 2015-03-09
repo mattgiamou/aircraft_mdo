@@ -31,12 +31,18 @@ ANGLE
 SECTION                                                     |  (keyword)
 0.0000    0.0000    0.0000    BODY_ROOT_CHORD   0.000    BODY_SPAN_N    3   | Xle Yle Zle   Chord Ainc   [ Nspan Sspace ]
 
+CONTROL                              | (keyword)
+elevator  1.0  0.9   0. 1. 0.   1.0  | name, gain,  Xhinge,  XYZhvec,  SgnDup
+
 AFIL 0.0 1.0
 BODY_AIRFOIL
 
 #______________
 SECTION                                                     |  (keyword)
 TRANSITION_X_OFFSET    TRANSITION_Y_OFFSET    0.0000    TRANSITION_CHORD   0.000    TRANSITION_SPAN_N    1   | Xle Yle Zle   Chord Ainc   [ Nspan Sspace ]
+
+CONTROL                              | (keyword)
+elevator  1.0  0.9   0. 1. 0.   1.0  | name, gain,  Xhinge,  XYZhvec,  SgnDup
 
 AFIL 0.0 1.0
 BODY_AIRFOIL
