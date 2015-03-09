@@ -88,7 +88,7 @@ class AVL():
         CL_alpha = self.get_output_val(stab_output, 'CLa')*np.pi/180.0
         CM_alpha = self.get_output_val(stab_output, 'Cma')*np.pi/180.0
         
-        return (CL, CD, CM, CL_alpha, CM_alpha, e)
+        return (CL, CD, CM, CL_alpha, CM_alpha)
         
         
     def get_output_val(self, output, var):

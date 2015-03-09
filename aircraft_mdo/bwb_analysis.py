@@ -97,10 +97,10 @@ class ThrustVelocity(Component):
     cla = Float(iotype='in', desc='CL_alpha')
     cl0 = Float(iotype='in', desc='CL at alpha = 0')
     CD0 = Float(0.04, iotype='in', desc='CD at alpha = 0')    
-    a_cruise = Float(iotype='out', desc='Cruise angle of attack')
+    a_cruise = Float(iotype='in', desc='Cruise angle of attack')
     
     v_cruise = Float(iotype='out', desc='Cruise velocity in m/s')
-        
+
     def execute(self):
         (v_max, T_res) = maxSpeedWithThrust(self.CD0,self.b_ref,self.s_ref,
                                             self.cla,self.cl0,self.a_cruise)

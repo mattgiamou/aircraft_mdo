@@ -6,6 +6,8 @@ required alpha given motocalc and AVL/XFLR5 lift slope info.
 
 import numpy as np
 from matplotlib import pyplot as plt
+from scipy.interpolate import UnivariateSpline
+
 rho = 1.225
 #alpha given in deg.
 V = [0.00,2.00,4.00,6.00,8.00,10.0,12.0,14.0,15.0]
@@ -13,7 +15,11 @@ T = [6.50,6.25,6.00,5.75,5.50,5.20,4.80,4.40,4.20]
 #Interpolate the thrust curve:
 V_interp = np.arange(0,15.0,0.1)    #Arbitrarily set.
 T_interp = np.interp(V_interp,V,T)
+#T_interp = UnivariateSpline(V,T)
 
+def cruise_residual(m, v_cruise, s_ref, cl0, cla, alpha):
+    return abs(9.81*m - 0.5*1.225*v_cruise**2*s_ref*(cl0 + cla*alpha))
+    
 def alpha_cruise(V_Cruise,W,S,CLa,CL0):
 	#V_Cruise = 15.5; #m/s (from motoCalc)
 	#W = 2*9.8;      #kg
@@ -41,15 +47,15 @@ def maxSpeedWithThrust(CD0,b,S,CLa,CL0,alpha,e=0.8):
     #Generate D curve
     V = V_interp
     D = (CD0 + K*(CL0 + CLa*alpha*np.pi/180.0)**2)*S*0.5*rho*V**2
-    plt.figure()
-    plt.plot(V_interp, D, 'b*')
-    plt.grid()
-    plt.plot(V_interp, T_interp, 'r--')
-    plt.legend(('Drag', 'Thrust Available'))
-    plt.xlabel('V (m/s)')
-    plt.ylabel('Force (N)')
+#    plt.figure()
+#    plt.plot(V_interp, D, 'b*')
+#    plt.grid()
+#    plt.plot(V_interp, T_interp, 'r--')
+#    plt.legend(('Drag', 'Thrust Available'))
+#    plt.xlabel('V (m/s)')
+#    plt.ylabel('Force (N)')
     #Find the index of where delta is minimized:
-    delta = abs(T_interp-D)
+    delta = abs(T_interp - D)
     V_index = np.argmin(delta)
     T_res = D[V_index] - T_interp[V_index]
     #Determine V at the index of minimum delta:
