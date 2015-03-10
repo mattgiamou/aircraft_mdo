@@ -15,8 +15,37 @@ T = [6.50,6.25,6.00,5.75,5.50,5.20,4.80,4.40,4.20,3.8]
 #Interpolate the thrust curve:
 V_interp = np.arange(0,16.0,0.1)    #Arbitrarily set.
 T_interp = np.interp(V_interp,V,T)
-#T_interp = UnivariateSpline(V,T)
+T_spline = UnivariateSpline(V,T)
 
+
+def get_thrust_available(v):
+    return T_spline(v)
+    
+    
+class CruiseSolver():
+    """ 
+    Used to solve for cruise alpha, velocity.
+    """
+    def __init__(self, M, S, b, cl0, cla, cd0=0.04, e=0.8):
+        self.W = M*9.81
+        self.b = b
+        self.S = S
+        self.cl0 = cl0
+        self.cla = cla
+        self.cd0 = cd0
+        self.e = e
+        self.AR = b**2/S
+        self.K = 1/(self.AR*self.e*np.pi)
+        
+    def get_cruise_alpha(self, v):
+
+        return (2*self.W/(rho*v**2*self.S) - self.cl0)/self.cla        
+        
+    def compute_drag(self, alpha, v):
+        
+        return (self.cd0 + self.K*(self.cl0 + alpha*self.cla)**2)*\
+                0.5*rho*v**2*self.S
+    
 def cruise_residual(m, v_cruise, s_ref, cl0, cla, alpha):
     return 9.81*m - 0.5*1.225*v_cruise**2*s_ref*(cl0 + cla*alpha)
     
@@ -37,7 +66,7 @@ def CL_Cruise(W,S,V_Cruise):
 	return CL
 	
 def CruiseAlpha(CL0,CLa,CL):
-	alpha = (CL-CL0)/CLa*180/np.pi
+	alpha = (CL-CL0)/CLa
 	return alpha
 
 def maxSpeedWithThrust(CD0,b,S,CLa,CL0,alpha,e=0.8):
@@ -47,14 +76,14 @@ def maxSpeedWithThrust(CD0,b,S,CLa,CL0,alpha,e=0.8):
     #Generate D curve
     V = V_interp
     # Had *np.pi/180 below... probably wrong
-    D = (CD0 + K*(CL0 + CLa*alpha*np.pi/180.0)**2)*S*0.5*rho*V**2
-    plt.figure()
-    plt.plot(V_interp, D, 'b*')
-    plt.grid()
-    plt.plot(V_interp, T_interp, 'r--')
-    plt.legend(('Drag', 'Thrust Available'))
-    plt.xlabel('V (m/s)')
-    plt.ylabel('Force (N)')
+    D = (CD0 + K*(CL0 + CLa*alpha)**2)*S*0.5*rho*V**2
+#    plt.figure()
+#    plt.plot(V_interp, D, 'b*')
+#    plt.grid()
+#    plt.plot(V_interp, T_interp, 'r--')
+#    plt.legend(('Drag', 'Thrust Available'))
+#    plt.xlabel('V (m/s)')
+#    plt.ylabel('Force (N)')
     #Find the index of where delta is minimized:
     delta = abs(T_interp - D)
     V_index = np.argmin(delta)

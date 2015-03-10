@@ -1,7 +1,7 @@
 MDO_Template
 0.0                          | Mach
 0     0     0.0              | iYsym  iZsym  Zsym
-0.574315116215      0.465711252202      1.2332  | Sref   Cref   Bref
+0.569451905284      0.406751360917      1.4  | Sref   Cref   Bref
 0.259     0.000     0.002    | Xref   Yref   Zref
 0.04                         | CDp
 
@@ -29,18 +29,7 @@ ANGLE
 
 #______________
 SECTION                                                     |  (keyword)
-0.0000    0.0000    0.0000    0.9   0.000    4    3   | Xle Yle Zle   Chord Ainc   [ Nspan Sspace ]
-
-CONTROL                              | (keyword)
-elevator  1.0  0.9   0. 1. 0.   1.0  | name, gain,  Xhinge,  XYZhvec,  SgnDup
-
-
-AFIL 0.0 1.0
-avl/airfoils/e330.dat
-
-#______________
-SECTION                                                     |  (keyword)
-0.0545955351399    0.15    0.0000    0.84540446486   0.000    3    1   | Xle Yle Zle   Chord Ainc   [ Nspan Sspace ]
+0.0000    0.0000    0.0000    0.8   0.000    4    3   | Xle Yle Zle   Chord Ainc   [ Nspan Sspace ]
 
 CONTROL                              | (keyword)
 elevator  1.0  0.9   0. 1. 0.   1.0  | name, gain,  Xhinge,  XYZhvec,  SgnDup
@@ -50,39 +39,27 @@ avl/airfoils/e330.dat
 
 #______________
 SECTION                                                     |  (keyword)
-0.333333333333    0.25    0.000	    0.3     0.000   11    1   | Xle Yle Zle   Chord Ainc   [ Nspan Sspace ]
+0.0401923788647    0.15    0.0000    0.759807621135   0.000    3    1   | Xle Yle Zle   Chord Ainc   [ Nspan Sspace ]
+
+CONTROL                              | (keyword)
+elevator  1.0  0.9   0. 1. 0.   1.0  | name, gain,  Xhinge,  XYZhvec,  SgnDup
+
+AFIL 0.0 1.0
+avl/airfoils/e330.dat
+
+#______________
+SECTION                                                     |  (keyword)
+0.3    0.25    0.000	    0.3     0.000   14    1   | Xle Yle Zle   Chord Ainc   [ Nspan Sspace ]
 
 AFIL 0.0 1.0
 avl/airfoils/MILEY_M06-13-128.dat
 
 #______________
 SECTION                                                     |  (keyword)
-0.365406677382    0.6166    0.0000    0.24   -0.0   12    1   | Xle Yle Zle   Chord Ainc   [ Nspan Sspace ]
+0.50983844617    0.7    0.0000    0.21   0.0   12    1   | Xle Yle Zle   Chord Ainc   [ Nspan Sspace ]
 
 AFIL 0.0 1.0
 avl/airfoils/MILEY_M06-13-128.dat
 
-#______________
-#SURFACE
-#Fin
-#Nchordwise  Cspace   Nspanwise  Sspace
-#7            1.0      11          1.0
-
-#COMPONENT
-#1
-
-#SCALE
-#1.0   1.0  1.0
-
-#TRANSLATE
-#95.0  0.0   6.0
-
-#SECTION
-#Xle    Yle    Zle     Chord   Ainc  Nspanwise  Sspace
-#0.75    0.0    0.0     0.15    0.    
-
-#SECTION
-#Xle    Yle    Zle     Chord   Ainc  Nspanwise  Sspace
-#0.9    0.0     0.15    0.08   0.  
 
 

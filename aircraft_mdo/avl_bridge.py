@@ -139,15 +139,17 @@ if __name__ == '__main__':
         
     with AVL(default_file) as avl:
         N = 11
-        alpha = np.linspace(0, 10, N)
-        CL = np.zeros(alpha.shape)
+        alpha = 3.6#np.linspace(0, 10, N)
+        v = np.linspace(1.0, 15.0, N)
+        CL = np.zeros(v.shape)
         CD = np.zeros(CL.shape)
         CM = np.zeros(CL.shape)
-        avl.set_parameter('v', 15)
+        avl.set_constraint('a','a', alpha)
         #avl.set_parameter('x', 0.2)
         for idx in xrange(0, N):
             t = time()
-            avl.set_constraint('a','a',alpha[idx])
+            #avl.set_constraint('a','a',alpha[idx])
+            avl.set_parameter('v', v[idx])
             cl,cd,cm,cla,cma = avl.run()
             CL[idx] = cl
             CD[idx] = cd
@@ -168,10 +170,10 @@ if __name__ == '__main__':
 #        print "CLa_1: ", cla1, '\n'
         
         plt.figure()
-        plt.plot(alpha, CL/CD)
+        plt.plot(v, CL)
         plt.grid()
-#        plt.plot(alpha,CD)
-#        plt.plot(alpha, CM)
+        plt.plot(v,CD)
+        plt.plot(v, CM)
         plt.xlabel('alpha (deg)')
-        #plt.legend(('CL','CD','CM'))
+        plt.legend(('CL','CD','CM'))
         plt.title('CL/CD vs. Alpha')        
