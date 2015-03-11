@@ -57,6 +57,13 @@ def stability_bonus(t):
     """
     return 1.0 + 0.025*np.min(t, 8.0)
 
+def flight_score(t_balls, g_balls, p_balls, v, turn_t, empty_mass, total_mass):
+    tc = time_cost(v, turn_t)
+    cu = cargo_units(t_balls, g_balls, p_balls)
+    pf = payload_fraction(t_balls, g_balls, p_balls, empty_mass)
+    
+    # Stability, configuration, take off, and camera bonuses assumed...
+    return tc*cu*pf*1.2*1.5*1.2 + 200
 
 if __name__ == "__main__":
     from matplotlib import pyplot as plt

@@ -26,10 +26,13 @@ class AVL():
         self.p = pexpect.spawn('avl ' + avl_filename)
         # Ready the AVL process for execution
         self.expect() # The first instance of c>
-        self.p.sendline('mset 0') # Set the c.g. from the mass file
+        self.p.sendline('mset 0') # Set the c.g., inertia from the mass file
         self.expect()
         self.p.sendline('oper')
         self.expect()
+        #self.p.sendline('g')
+        #self.p.sendline()
+        #self.expect()
         
     def expect(self, token=avl_expect):
         """
@@ -77,7 +80,7 @@ class AVL():
         CL = self.get_output_val(output, 'CLtot')
         CD = self.get_output_val(output, 'CDtot')
         CM = self.get_output_val(output, 'Cmtot')
-        e = self.get_output_val(output, 'e')
+        #e = self.get_output_val(output, 'e')
         # Extract stability derivatives
         self.p.sendline('st')
         self.expect()
@@ -90,19 +93,46 @@ class AVL():
         
         return (CL, CD, CM, CL_alpha, CM_alpha)
         
-        
     def get_output_val(self, output, var):
         """
         Extract variable 'var' from string output.
         """
         # Needs +,-,., and E (for exponential notation)
-        match1 = re.search(str(var)+' =[ ]+[\.\-\+0-9E]+', output)
+        match1 = re.search(str(var)+'[ ]+=[ ]+[\.\-\+0-9E]+', output)
         subquery = output[match1.start():match1.end()]
         # Extract the number from the sub-query
         submatch = re.search('[\.\-\+0-9E]+', subquery)
         val = subquery[submatch.start():submatch.end()]
         return float(val) 
-
+        
+    def trimmed_flight(self, v):
+        """
+        Gives hinge moments, cruise alpha, for a given speed.
+        """
+        self.set_parameter('v', v)
+        # Sets steady level flight alpha
+        self.p.sendline('c1')
+        self.expect()
+        self.p.sendline()
+        self.expect()
+        self.set_constraint('d1','pm',0.0)
+        self.p.sendline('x')
+        self.expect()
+        output = self.p.before
+        alpha = self.get_output_val(output, 'Alpha')
+        #print output
+        #elevator = self.get_output_val(output, 'elevator')
+        elevator = -100000
+        CD = self.get_output_val(output, 'CDtot')
+        e = self.get_output_val(output, 'e')
+        self.p.sendline('hm')
+        self.expect()
+        self.p.sendline()
+        self.expect()
+        output = self.p.before
+        #hm = self.get_output_val(output, 'elevator')
+        hm = -100000.0
+        return (alpha, elevator, CD, e, hm)
     # These encourage this class to be used with a "with" statement        
     def __enter__(self):
         return self
@@ -123,7 +153,16 @@ def avl_analysis(filename=default_file):
         cl0,cd0,cm0,cla0,cma0 = avl.run()
         
     return (cl0, cm0, cla0, cma0)
-        
+    
+def avl_trimmed_analysis(v, filename=default_file):
+    """
+    Compute alpha, elevator deflection, CD, e, and hm at a given cruise 
+    velocity.
+    """
+    with AVL(filename) as avl:
+        (alpha, elevator, CD, e, hm) = avl.trimmed_flight(v)
+    return (alpha, elevator, CD, e, hm)
+    
 if __name__ == '__main__':
     # Test basic functionality (with ensures that the AVL process is closed on 
     # exit)

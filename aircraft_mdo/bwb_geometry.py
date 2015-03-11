@@ -12,14 +12,13 @@ avl_file_out = 'avl/out/default.avl'
 mass_file_out = 'avl/out/default.mass'
 default_density = 60.0 # kg/m^3
 
-def compute_mass(struct_mass, n_golf_balls=13):
+def compute_mass(struct_mass, n_golf_balls=13, n_ping_pong_balls=13):
     """ Used to estimate the empty mass of the plane. Should scale up with 
     surface area of body and wings in some principled manner. 
     """
     non_structural_mass = 0.326 #kg
-    ball_mass = n_golf_balls*0.04593
+    ball_mass = n_golf_balls*0.04593 + n_ping_pong_balls*0.0027
     return non_structural_mass + ball_mass + struct_mass
-    
     
 def compute_ref_area(body_chord, body_span, tran_chord, tran_span, wing_chord,
                      wing_span, wing_tip_chord):
@@ -181,7 +180,7 @@ def write_avl_files(body_chord, body_span, body_sweep, wing_chord, wing_span,
                     transition=0.1, wing_airfoil=default_wing_airfoil,
                     body_airfoil=default_body_airfoil, avl_file=avl_file_out,
                     mass_file=mass_file_out, density=default_density,
-                    n_balls=13):
+                    n_balls=13, elevator_depth=0.9):
     """
     Creates .avl and .mass files for AVL. All units are meters and degrees.
     All spanwise (y-directional) variables are half spans. 

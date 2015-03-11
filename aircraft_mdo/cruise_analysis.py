@@ -7,6 +7,7 @@ required alpha given motocalc and AVL/XFLR5 lift slope info.
 import numpy as np
 from matplotlib import pyplot as plt
 from scipy.interpolate import UnivariateSpline
+from scipy.optimize import fsolve
 
 rho = 1.225
 #alpha given in deg.
@@ -16,6 +17,12 @@ T = [6.50,6.25,6.00,5.75,5.50,5.20,4.80,4.40,4.20,3.8]
 V_interp = np.arange(0,16.0,0.1)    #Arbitrarily set.
 T_interp = np.interp(V_interp,V,T)
 T_spline = UnivariateSpline(V,T)
+
+# 10x5
+V_10x5 = [0,   2,   4,   6,   8,   10,  12,  14, 15.0,15.5]
+T_10x5 = [8.2, 7.8, 7.4, 6.95,6.3, 5.55,4.6, 3.6,2.95,2.65]
+T_interp = np.interp(V_interp,V_10x5,T_10x5)
+T_spline = UnivariateSpline(V_10x5,T_10x5)
 
 
 def get_thrust_available(v):
@@ -38,14 +45,26 @@ class CruiseSolver():
         self.K = 1/(self.AR*self.e*np.pi)
         
     def get_cruise_alpha(self, v):
-
         return (2*self.W/(rho*v**2*self.S) - self.cl0)/self.cla        
+        
+    def get_cruise_v(self, alpha):
+        return np.sqrt((2*self.W)/(rho*self.S*(self.cl0 + alpha*self.cla)))        
         
     def compute_drag(self, alpha, v):
         
         return (self.cd0 + self.K*(self.cl0 + alpha*self.cla)**2)*\
                 0.5*rho*v**2*self.S
     
+    def thrust_differential(self, alpha):
+        v = self.get_cruise_v(alpha)
+        D = self.compute_drag(alpha, v)
+        T = get_thrust_available(v)
+        return T - D
+    def solve_cruise_alpha(self):
+        alpha = fsolve(self.thrust_differential, 0.2)
+        v = self.get_cruise_v(alpha)
+        return alpha, v[0]
+
 def cruise_residual(m, v_cruise, s_ref, cl0, cla, alpha):
     return 9.81*m - 0.5*1.225*v_cruise**2*s_ref*(cl0 + cla*alpha)
     
